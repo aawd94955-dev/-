@@ -10,19 +10,13 @@ const CONFIG = {
   ],
   slideDuration: 7000,
   shuffle: false,
+  parallaxStrength: 18,
 };
 
 const Slideshow = (() => {
   const container     = document.getElementById('slideshow');
   const indicatorWrap = document.getElementById('indicators');
-  let slides = [], dots = [], current = 0, timer = null, animating = false;
-
-  const shuffleArr = arr => {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-  };
+  let slides = [], dots = [], current = 0, timer = null;
 
   const preload = srcs => Promise.allSettled(
     srcs.map(src => new Promise(res => {
@@ -34,48 +28,12 @@ const Slideshow = (() => {
   );
 
   function goTo(index) {
-    if (animating) return;
-    const next = (index + slides.length) % slides.length;
-    if (next === current) return;
-    animating = true;
-
-    const incoming = slides[next];
-    const outgoing = slides[current];
-
-    slides.forEach((s, i) => {
-      if (i !== current && i !== next) {
-        s.style.transition = 'none';
-        s.style.zIndex = '0';
-        s.style.transform = 'translateX(100%)';
-      }
-    });
-
-    incoming.style.transition = 'none';
-    incoming.style.zIndex = '2';
-    incoming.style.transform = 'translateX(100%)';
-
-    outgoing.style.zIndex = '1';
-
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const easing = 'transform 0.9s cubic-bezier(0.77, 0, 0.18, 1)';
-        incoming.style.transition = easing;
-        incoming.style.transform  = 'translateX(0%)';
-        outgoing.style.transition = easing;
-        outgoing.style.transform  = 'translateX(-100%)';
-
-        dots[current]?.classList.remove('active');
-        current = next;
-        dots[current]?.classList.add('active');
-
-        setTimeout(() => {
-          outgoing.style.transition = 'none';
-          outgoing.style.zIndex     = '0';
-          outgoing.style.transform  = 'translateX(100%)';
-          animating = false;
-        }, 950);
-      });
-    });
+    const prev = current;
+    current = (index + slides.length) % slides.length;
+    slides[prev].classList.remove('active');
+    slides[current].classList.add('active');
+    dots[prev]?.classList.remove('active');
+    dots[current]?.classList.add('active');
   }
 
   function startAuto() {
@@ -85,7 +43,6 @@ const Slideshow = (() => {
 
   async function init() {
     let srcs = [...CONFIG.images];
-    if (CONFIG.shuffle) shuffleArr(srcs);
     if (!srcs.length) { container.style.background = '#111'; return; }
 
     await preload(srcs);
@@ -96,9 +53,6 @@ const Slideshow = (() => {
       img.alt      = '';
       img.loading  = 'eager';
       img.decoding = 'async';
-      img.style.transition = 'none';
-      img.style.transform  = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
-      img.style.zIndex     = i === 0 ? '1' : '0';
       container.appendChild(img);
       slides.push(img);
 
@@ -110,11 +64,48 @@ const Slideshow = (() => {
       dots.push(dot);
     });
 
-    dots[0]?.classList.add('active');
+    goTo(0);
     startAuto();
   }
 
   return { init };
 })();
 
-document.addEventListener('DOMContentLoaded', () => Slideshow.init());
+const Parallax = (() => {
+  let targetX = 0, targetY = 0;
+  let currentX = 0, currentY = 0;
+  let rafId = null;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function onMouseMove(e) {
+    const cx = window.innerWidth  / 2;
+    const cy = window.innerHeight / 2;
+    targetX = ((e.clientX - cx) / cx) * CONFIG.parallaxStrength;
+    targetY = ((e.clientY - cy) / cy) * CONFIG.parallaxStrength;
+  }
+
+  function tick() {
+    currentX = lerp(currentX, targetX, 0.06);
+    currentY = lerp(currentY, targetY, 0.06);
+
+    const imgs = document.querySelectorAll('#slideshow img');
+    imgs.forEach(img => {
+      img.style.transform = `translate(${-currentX}px, ${-currentY}px)`;
+    });
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function init() {
+    window.addEventListener('mousemove', onMouseMove);
+    tick();
+  }
+
+  return { init };
+})();
+
+document.addEventListener('DOMContentLoaded', () => {
+  Slideshow.init();
+  Parallax.init();
+});
