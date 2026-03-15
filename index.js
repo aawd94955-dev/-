@@ -15,7 +15,7 @@ const CONFIG = {
 const Slideshow = (() => {
   const container     = document.getElementById('slideshow');
   const indicatorWrap = document.getElementById('indicators');
-  let slides = [], dots = [], current = 0, timer = null;
+  let slides = [], dots = [], current = 0, timer = null, animating = false;
 
   const shuffleArr = arr => {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -34,21 +34,39 @@ const Slideshow = (() => {
   );
 
   function goTo(index) {
-    const prev = current;
-    current = (index + slides.length) % slides.length;
+    if (animating) return;
+    const next = (index + slides.length) % slides.length;
+    if (next === current) return;
+    animating = true;
 
-    slides[prev].classList.remove('active');
-    slides[prev].classList.add('prev');
+    const incoming = slides[next];
+    const outgoing = slides[current];
 
-    slides[current].classList.remove('prev');
-    slides[current].classList.add('active');
+    incoming.style.transition = 'none';
+    incoming.style.transform  = 'translateX(100%)';
 
-    setTimeout(() => {
-      slides[prev].classList.remove('prev');
-    }, 950);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        incoming.style.transition = 'transform 0.9s cubic-bezier(0.77, 0, 0.18, 1)';
+        incoming.style.transform  = 'translateX(0%)';
+        outgoing.style.transition = 'transform 0.9s cubic-bezier(0.77, 0, 0.18, 1)';
+        outgoing.style.transform  = 'translateX(-100%)';
 
-    dots[prev]?.classList.remove('active');
-    dots[current]?.classList.add('active');
+        dots[current]?.classList.remove('active');
+        current = next;
+        dots[current]?.classList.add('active');
+
+        setTimeout(() => {
+          slides.forEach((s, i) => {
+            if (i !== current) {
+              s.style.transition = 'none';
+              s.style.transform  = 'translateX(100%)';
+            }
+          });
+          animating = false;
+        }, 950);
+      });
+    });
   }
 
   function startAuto() {
@@ -69,6 +87,7 @@ const Slideshow = (() => {
       img.alt      = '';
       img.loading  = 'eager';
       img.decoding = 'async';
+      img.style.transform = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
       container.appendChild(img);
       slides.push(img);
 
@@ -80,7 +99,6 @@ const Slideshow = (() => {
       dots.push(dot);
     });
 
-    slides[0].classList.add('active');
     dots[0]?.classList.add('active');
     startAuto();
   }
