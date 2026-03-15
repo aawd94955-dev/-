@@ -12,7 +12,7 @@ const CONFIG = {
     'images/nmixx4.jpg',
     'images/nmixx5.jpg',
   ],
-  slideDuration: 700,   // 한 장 표시 시간 (ms)
+  slideDuration: 4000,   // 한 장 표시 시간 (ms)
   shuffle: false,        // true 로 바꾸면 랜덤 순서
 };
 
