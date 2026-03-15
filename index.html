@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NMIXX — Interactive Wallpaper</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── 배경 슬라이드쇼 ── -->
+  <div id="slideshow" aria-hidden="true">
+    <!-- JS가 <img> 슬라이드를 동적으로 삽입합니다 -->
+  </div>
+
+  <!-- ── 오버레이 노이즈 / 그레인 ── -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ── 상단 로고 ── -->
+  <header class="site-header">
+    <span class="logo-nmixx">NMIXX</span>
+    <span class="logo-sub">MIX × MATCH</span>
+  </header>
+
+  <!-- ── 시계 ── -->
+  <div class="clock-wrap" id="clockWrap">
+    <div class="clock-time" id="clockTime">00:00</div>
+    <div class="clock-date" id="clockDate">MON, JAN 00</div>
+  </div>
+
+  <!-- ── 슬라이드 인디케이터 ── -->
+  <div class="indicators" id="indicators" aria-label="슬라이드 인디케이터"></div>
+
+  <!-- ── 미디어 세션 카드 ── -->
+  <div class="media-card" id="mediaCard" role="status" aria-live="polite" aria-atomic="true">
+    <div class="media-art-wrap">
+      <img class="media-art" id="mediaArt" src="" alt="앨범 아트" />
+      <div class="media-art-blur" id="mediaArtBlur"></div>
+    </div>
+    <div class="media-info">
+      <p class="media-title" id="mediaTitle">곡 제목</p>
+      <p class="media-artist" id="mediaArtist">아티스트</p>
+      <p class="media-album" id="mediaAlbum">앨범</p>
+    </div>
+    <div class="media-bars" id="mediaBars" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
