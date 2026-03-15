@@ -12,26 +12,15 @@ html, body {
 
 #slideshow {
   position: fixed; inset: 0; z-index: 0;
-  display: flex;
-  will-change: transform;
 }
 
 #slideshow img {
-  position: absolute; top: 0; left: 0;
+  position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
   object-position: center center;
   image-rendering: auto;
   transform: translateX(100%);
-  transition: transform 0.9s cubic-bezier(0.77, 0, 0.18, 1);
-}
-
-#slideshow img.active {
-  transform: translateX(0%);
-}
-
-#slideshow img.prev {
-  transform: translateX(-100%);
 }
 
 .indicators {
