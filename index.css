@@ -301,3 +301,47 @@ html, body {
   .media-card  { left: 16px; bottom: 20px; max-width: calc(100vw - 32px); }
   .indicators  { bottom: 20px; }
 }
+
+/* ── YouTube 뱃지 ── */
+.yt-badge {
+  position: absolute;
+  top: -11px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #ff0000;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  padding: 2px 8px 2px 5px;
+  border-radius: 4px;
+  line-height: 1;
+}
+.yt-badge svg {
+  width: 13px; height: 13px;
+  flex-shrink: 0;
+}
+
+/* ── 진행 바 ── */
+.media-progress {
+  margin-top: 8px;
+  height: 2px;
+  width: 100%;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.media-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+  transition: width 0.4s linear;
+}
+
+/* 일시정지 시 진행 바 흐리게 */
+.media-card:not(.playing) .media-progress-bar {
+  opacity: 0.35;
+}
