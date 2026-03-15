@@ -42,14 +42,26 @@ const Slideshow = (() => {
     const incoming = slides[next];
     const outgoing = slides[current];
 
+    slides.forEach((s, i) => {
+      if (i !== current && i !== next) {
+        s.style.transition = 'none';
+        s.style.zIndex = '0';
+        s.style.transform = 'translateX(100%)';
+      }
+    });
+
     incoming.style.transition = 'none';
-    incoming.style.transform  = 'translateX(100%)';
+    incoming.style.zIndex = '2';
+    incoming.style.transform = 'translateX(100%)';
+
+    outgoing.style.zIndex = '1';
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        incoming.style.transition = 'transform 0.9s cubic-bezier(0.77, 0, 0.18, 1)';
+        const easing = 'transform 0.9s cubic-bezier(0.77, 0, 0.18, 1)';
+        incoming.style.transition = easing;
         incoming.style.transform  = 'translateX(0%)';
-        outgoing.style.transition = 'transform 0.9s cubic-bezier(0.77, 0, 0.18, 1)';
+        outgoing.style.transition = easing;
         outgoing.style.transform  = 'translateX(-100%)';
 
         dots[current]?.classList.remove('active');
@@ -57,12 +69,9 @@ const Slideshow = (() => {
         dots[current]?.classList.add('active');
 
         setTimeout(() => {
-          slides.forEach((s, i) => {
-            if (i !== current) {
-              s.style.transition = 'none';
-              s.style.transform  = 'translateX(100%)';
-            }
-          });
+          outgoing.style.transition = 'none';
+          outgoing.style.zIndex     = '0';
+          outgoing.style.transform  = 'translateX(100%)';
           animating = false;
         }, 950);
       });
@@ -87,7 +96,9 @@ const Slideshow = (() => {
       img.alt      = '';
       img.loading  = 'eager';
       img.decoding = 'async';
-      img.style.transform = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
+      img.style.transition = 'none';
+      img.style.transform  = i === 0 ? 'translateX(0%)' : 'translateX(100%)';
+      img.style.zIndex     = i === 0 ? '1' : '0';
       container.appendChild(img);
       slides.push(img);
 
