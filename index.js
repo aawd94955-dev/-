@@ -1,9 +1,5 @@
-/* ─────────────────────────────────────────────
-   NMIXX Interactive Wallpaper — index.js
-   ───────────────────────────────────────────── */
 'use strict';
 
-/* ── 설정 ── */
 const CONFIG = {
   images: [
     'images/nmixx1.jpg',
@@ -12,11 +8,10 @@ const CONFIG = {
     'images/nmixx4.jpg',
     'images/nmixx5.jpg',
   ],
-  slideDuration: 7000,   // 한 장 표시 시간 (ms)
-  shuffle: false,        // true 로 바꾸면 랜덤 순서
+  slideDuration: 7000,
+  shuffle: false,
 };
 
-/* ── 슬라이드쇼 ── */
 const Slideshow = (() => {
   const container     = document.getElementById('slideshow');
   const indicatorWrap = document.getElementById('indicators');
@@ -29,11 +24,9 @@ const Slideshow = (() => {
     }
   };
 
-  /* 모든 이미지 미리 로드 */
   const preload = srcs => Promise.allSettled(
     srcs.map(src => new Promise(res => {
       const img = new Image();
-      // 브라우저가 원본 해상도로 디코딩하도록 힌트
       img.decoding = 'async';
       img.onload = img.onerror = () => res(src);
       img.src = src;
@@ -43,8 +36,17 @@ const Slideshow = (() => {
   function goTo(index) {
     const prev = current;
     current = (index + slides.length) % slides.length;
+
     slides[prev].classList.remove('active');
+    slides[prev].classList.add('prev');
+
+    slides[current].classList.remove('prev');
     slides[current].classList.add('active');
+
+    setTimeout(() => {
+      slides[prev].classList.remove('prev');
+    }, 950);
+
     dots[prev]?.classList.remove('active');
     dots[current]?.classList.add('active');
   }
@@ -63,9 +65,9 @@ const Slideshow = (() => {
 
     srcs.forEach((src, i) => {
       const img = document.createElement('img');
-      img.src     = src;
-      img.alt     = '';
-      img.loading = 'eager';
+      img.src      = src;
+      img.alt      = '';
+      img.loading  = 'eager';
       img.decoding = 'async';
       container.appendChild(img);
       slides.push(img);
@@ -78,12 +80,12 @@ const Slideshow = (() => {
       dots.push(dot);
     });
 
-    goTo(0);
+    slides[0].classList.add('active');
+    dots[0]?.classList.add('active');
     startAuto();
   }
 
   return { init };
 })();
 
-/* ── 시작 ── */
 document.addEventListener('DOMContentLoaded', () => Slideshow.init());
