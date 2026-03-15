@@ -4,52 +4,68 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NMIXX — Interactive Wallpaper</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="index.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500&family=Space+Mono&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-  <!-- ── 배경 슬라이드쇼 ── -->
-  <div id="slideshow" aria-hidden="true">
-    <!-- JS가 <img> 슬라이드를 동적으로 삽입합니다 -->
-  </div>
+  <!-- 배경 슬라이드쇼 -->
+  <div id="slideshow" aria-hidden="true"></div>
 
-  <!-- ── 오버레이 노이즈 / 그레인 ── -->
+  <!-- 그레인 오버레이 -->
   <div class="grain" aria-hidden="true"></div>
 
-  <!-- ── 상단 로고 ── -->
+  <!-- 상단 로고 -->
   <header class="site-header">
     <span class="logo-nmixx">NMIXX</span>
     <span class="logo-sub">MIX × MATCH</span>
   </header>
 
-  <!-- ── 시계 ── -->
-  <div class="clock-wrap" id="clockWrap">
+  <!-- 시계 -->
+  <div class="clock-wrap">
     <div class="clock-time" id="clockTime">00:00</div>
     <div class="clock-date" id="clockDate">MON, JAN 00</div>
   </div>
 
-  <!-- ── 슬라이드 인디케이터 ── -->
+  <!-- 슬라이드 인디케이터 -->
   <div class="indicators" id="indicators" aria-label="슬라이드 인디케이터"></div>
 
-  <!-- ── 미디어 세션 카드 ── -->
+  <!-- 유튜브 미디어 카드 -->
   <div class="media-card" id="mediaCard" role="status" aria-live="polite" aria-atomic="true">
+
+    <!-- YouTube 뱃지 -->
+    <div class="yt-badge">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M23.5 6.2a3.01 3.01 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3.01 3.01 0 0 0 .5 6.2 31.2 31.2 0 0 0 0 12a31.2 31.2 0 0 0 .5 5.8 3.01 3.01 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3.01 3.01 0 0 0 2.1-2.1A31.2 31.2 0 0 0 24 12a31.2 31.2 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/>
+      </svg>
+      <span>YouTube</span>
+    </div>
+
+    <!-- 썸네일 -->
     <div class="media-art-wrap">
-      <img class="media-art" id="mediaArt" src="" alt="앨범 아트" />
+      <img class="media-art" id="mediaArt" src="" alt="썸네일" />
       <div class="media-art-blur" id="mediaArtBlur"></div>
     </div>
+
+    <!-- 텍스트 + 진행 바 -->
     <div class="media-info">
-      <p class="media-title" id="mediaTitle">곡 제목</p>
-      <p class="media-artist" id="mediaArtist">아티스트</p>
-      <p class="media-album" id="mediaAlbum">앨범</p>
+      <p class="media-title"  id="mediaTitle">영상 제목</p>
+      <p class="media-artist" id="mediaArtist">채널명</p>
+      <p class="media-album"  id="mediaAlbum"></p>
+      <div class="media-progress" id="mediaProgress">
+        <div class="media-progress-bar" id="mediaProgressBar"></div>
+      </div>
     </div>
+
+    <!-- 이퀄라이저 바 -->
     <div class="media-bars" id="mediaBars" aria-hidden="true">
       <span></span><span></span><span></span><span></span><span></span>
     </div>
+
   </div>
 
-  <script src="app.js"></script>
+  <script src="index.js"></script>
 </body>
 </html>
